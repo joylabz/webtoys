@@ -4,6 +4,7 @@ let capture
 let gl
 let ball
 let synth
+let synthReady = false
 let path = []
 let pathIndex = 0
 let selectedColor
@@ -23,10 +24,18 @@ function setup() {
 
   ball = createVector(width/2, height/2)
   path.push(createVector(width/2, height/2))
-  synth = new p5.PolySynth();
-  synth.setADSR(0.25, 0.5, 1.0, 0.5)
   selectedColor = color(0)
   frameRate(12)
+
+  synth = new Tone.Sampler({
+    urls: {
+      C3: "C3.wav"
+    },
+    onload: function() {
+      synthReady = true
+    }
+    // baseUrl: "./",
+  }).toDestination();
 }
 
 function draw() {
@@ -115,7 +124,9 @@ function getColor(gl, x, y) {
 }
 
 function playSynth(selectedColor) {
-  userStartAudio()
+  if (!synthReady) {
+    return
+  }
 
   let colors = [
     color(255, 0, 0),
@@ -135,9 +146,11 @@ function playSynth(selectedColor) {
   let dur = 1/16;
 
   if (colorIndex != -1) {
-    synth.play(notes[colorIndex], velocity, time, dur);
+    // synth.play(notes[colorIndex], velocity, time, dur);
+    synth.triggerAttackRelease(notes[colorIndex], 1.0);
   }
 }
+
 function equalColors(c1, c2) {
     return red(c1) == red(c2)
         && green(c1) == green(c2)

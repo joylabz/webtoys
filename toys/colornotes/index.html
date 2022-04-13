@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="p5.js"></script>
-    <script src="p5.sound.min.js"></script>
+    <script src="tone.js"></script>
+    <script src="p5.min.js"></script>
+    <!-- <script src="p5.sound.min.js"></script> -->
+    <script src="sketch.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
@@ -11,14 +13,15 @@
         <img id="logo" src="logo.svg" alt="Color Notes">
       </a>
       <div class="controles">
-        <!-- <button><img src="camera.svg" alt="Camera" /></button>
-        <button><img src="file.svg" alt="Image File" /></button> -->
+        <!--
+        <button><img src="camera.svg" alt="Camera" /></button>
+        <button><img src="file.svg" alt="Image File" /></button>
+        -->
         <button onclick="alert('drag your mouse around colorful areas!')">
           <img src="help.svg" alt="Help" />
         </button>
       </div>
     </div>
     <div id="canvas"></div>
-    <script src="sketch.js"></script>
   </body>
 </html>
