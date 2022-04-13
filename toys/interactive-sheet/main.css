@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  cursor: pointer;
+}
+body > svg {
+  margin: auto;
+  height: 100%;
+}
+
+svg g[id^="STEP"] circle {
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+svg g[id^="STEP"] circle.selected {
+  fill-opacity: 1;
+}
+svg g[id^="STEP"] circle:hover {
+  fill-opacity: 0.8;
+}
+svg g[id^="STEP"] circle.active {
+  fill: red;
+}
+
+svg g[id="KEYS"] {
+  cursor: pointer;
+  transition: all 0.1s;
+}
+svg g[id="KEYS"] g path {
+  transition: all 0.1s;
+}
+svg g[id="KEYS"] g.active path {
+  fill: red;
+}
+
+svg g[id="NOTEHIGHLIGHT"] circle {
+  transition: all 0.1s;
+}
+svg g[id="NOTEHIGHLIGHT"] circle.active {
+  fill-opacity: 1;
+  fill: red;
+}
+
+svg g[id="CONTROLS"] {
+  cursor: pointer;
+}
+
+svg g[id="CONTROLS"] .active path:last-child {
+  fill: red;
+}

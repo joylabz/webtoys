@@ -1,0 +1,59 @@
+:root {
+  font-size: 3.5vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#toolbar {
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+#canvas {
+  height: 90vh;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+button {
+  width: 2rem;
+  height: 2rem;
+  background: #FFE231;
+  border: none;
+  outline: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+button.active {
+  border: solid 3px black;
+}
+button img {
+  width: 100%;
+  height: 100%;
+}
+
+#toolbar #logo {
+  width: 6rem;
+}

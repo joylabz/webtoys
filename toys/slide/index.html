@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>QWERTYUIOP SLIDE</title>
+    <style media="screen">
+      body {
+        margin: 0;
+        background: #eee;
+        width: 100%;
+        min-height: 100vh;
+      }
+      #cursor {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 5vw;
+        height: 5vw;
+        background: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cursor"></div>
+    <script type="text/javascript">
+      const encoder = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p']
+      let head = 0
+      let cursor
+      window.addEventListener('load', () => {
+        cursor = document.querySelector('#cursor')
+        cursor.style.left = '50%'
+        cursor.style.top = '50%'
+        console.log('yo')
+      })
+      window.addEventListener('keydown', (e) => {
+        const { key } = e
+        let i = encoder.indexOf(key)
+        if (i == -1) return
+        let left = parseInt(cursor.style.left)
+        if (Math.abs(i-head) < 3) {
+          if (i < head) {
+            cursor.style.left = `${left-1}%`
+          } else {
+            cursor.style.left = `${left+1}%`
+          }
+        }
+        head = i
+      })
+    </script>
+  </body>
+</html>

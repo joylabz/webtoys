@@ -1,0 +1,96 @@
+#appxxx {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 99999;
+  font-size: 4vh;
+  font-family: 'Dongle', sans-serif !important;
+}
+
+#appxxx button,
+#appxxx input, {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 3vh !important;
+}
+
+#appxxx input {
+  text-align: left;
+}
+
+#appxxx #toolbar {
+  list-style: none;
+  padding: 0 0 0 1vh;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#appxxx button,
+#appxxx .button {
+  border: 0;
+  background: #ddd;
+  border-radius: 10vh;
+  padding: 0.5vh 4vh 0 4vh;
+  line-height: 5.5vh;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 0.5vh;
+  cursor: pointer;
+  outline: none;
+}
+
+#appxxx button.glitchButton {
+  min-width: 20vh;
+}
+#appxxx button.editButton {
+  padding: 0;
+  width: 5vh;
+  height: 5vh;
+  margin: 0.5vh;
+}
+
+#appxxx #code-editor {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  top: 50%;
+  left: 40vh;
+  width: calc(100% - 50vh);
+  height: 70vh;
+  border-radius: 5vh;
+  transform: translate(0%, -50%);
+  box-shadow: 2px 2px 0 rgba(200, 200, 200, 0.8);
+  padding: 2vh 3vh;
+  max-width: 800px;
+}
+
+#appxxx #code-editor #editor {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #eee;
+  border-radius: 2.5vh;
+  box-shadow: 2px 2px 0 rgba(200, 200, 200, 0.8);
+  padding: 2vh;
+  font-family: monospace !important;
+  font-size: 0.75vh !important;
+  line-height: 1.0em;
+}
+
+.CodeMirror {
+  height: auto;
+  width: 100%;
+  font-size: 2.5vh !important;
+}

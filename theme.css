@@ -1,0 +1,149 @@
+@font-face {
+    font-family: 'Hallo Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Hallo Sans'), url('./hallo-sans-cdnfonts/Hallo-sans.woff') format('woff');
+}
+@font-face {
+    font-family: 'Hallo sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Hallo sans'), url('./hallo-sans-cdnfonts/Hallo-sans-light.woff') format('woff');
+}
+@font-face {
+    font-family: 'Hallo sans';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Hallo sans'), url('./hallo-sans-cdnfonts/Hallo-sans-black.woff') format('woff');
+}
+
+
+:root {
+  font-size: 4vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Hallo Sans', sans-serif;
+}
+
+img {
+  max-width: 100%;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a:link,
+a:hover,
+a:active,
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+.align-start {
+  align-items: flex-start;
+}
+.align-end {
+  align-items: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+}
+
+.fill-width {
+  width: 100%;
+}
+
+.fill-height {
+  height: 100%;
+}
+
+.fullscreen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+#cover {
+  background-size: cover;
+  background-image: url('./images/cover_background.png');
+  padding: 3rem;
+}
+
+#cover > * {
+  margin: 1.0rem 0;
+}
+
+#cover .clickable {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+#cover .clickable:hover {
+  transform: rotate(2deg) scale(1.05);
+}
+
+ul {
+  max-width: 600px;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+ul li {
+  padding: 1rem;
+}
+
+ul li a > * {
+  margin: 0.5rem 0;
+}
+
+ul li a .thumbnail {
+  width: 400px;
+  height: 300px;
+  object-fit: contain;
+}
+
+ul li a .play {
+  width: 50%;
+  transition: transform 0.1s;
+}
+ul li a .play:hover {
+  transform: rotate(5deg) scale(1.1);
+}
