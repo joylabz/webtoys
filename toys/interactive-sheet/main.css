@@ -52,3 +52,7 @@ svg g[id="CONTROLS"] {
 svg g[id="CONTROLS"] .active path:last-child {
   fill: red;
 }
+
+svg g#PLAY_HEAD > rect[id^="PLAY"].active {
+  fill-opacity: 1;
+}

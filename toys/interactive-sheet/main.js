@@ -53,6 +53,15 @@ window.addEventListener('load', function() {
           activateKey(notes[i].id)
           activateHightlight(notes[i].id)
         }
+        // Update play head
+        let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
+        for (let i = 0; i < playHead.length; i++) {
+          if ((i+1) === step) {
+            playHead[i].classList.add('active')
+          } else {
+            playHead[i].classList.remove('active')
+          }
+        }
         currentStep += 1
       }, "4n");
     }
@@ -76,10 +85,10 @@ window.addEventListener('load', function() {
   print.addEventListener('click', function() {
     window.open('interactive_sheet_music.pdf', '_blank');
   })
-  let help = document.querySelector('svg g#HELP')
-  help.addEventListener('click', function() {
-    window.open('https://www.youtube.com/watch?v=Vwd6v77a-MA', '_blank')
-  })
+  // let help = document.querySelector('svg g#HELP')
+  // help.addEventListener('click', function() {
+  //   window.open('https://www.youtube.com/watch?v=Vwd6v77a-MA', '_blank')
+  // })
 })
 
 function toggleSelected(el) {
@@ -172,6 +181,10 @@ function stopSong() {
 
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.remove('active')
+
+  let playHead = document.querySelector('svg g#PLAY_HEAD > rect[id^="PLAY"].active')
+  playHead.classList.remove('active')
+
 }
 
 function printPage() {
