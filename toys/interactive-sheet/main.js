@@ -72,6 +72,10 @@ window.addEventListener('load', function() {
   stop.addEventListener('click', function() {
     stopSong()
   })
+  let print = document.querySelector('svg g#PRINT')
+  print.addEventListener('click', function() {
+    window.open('interactive_sheet_music.pdf', '_blank');
+  })
 
 })
 
@@ -167,8 +171,8 @@ function stopSong() {
   play.classList.remove('active')
 }
 
-function print() {
-  console.log('soon')
+function printPage() {
+  window.print()
 }
 
 function help() {
