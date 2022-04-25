@@ -76,7 +76,10 @@ window.addEventListener('load', function() {
   print.addEventListener('click', function() {
     window.open('interactive_sheet_music.pdf', '_blank');
   })
-
+  let help = document.querySelector('svg g#HELP')
+  help.addEventListener('click', function() {
+    window.open('https://www.youtube.com/watch?v=Vwd6v77a-MA', '_blank')
+  })
 })
 
 function toggleSelected(el) {
