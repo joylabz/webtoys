@@ -155,7 +155,7 @@ function playNote(id) {
   // Note name
   let note = keyId.substr(0, 1)
   // Apply octave modifier
-  let octave = parseInt(keyId.substr(1)) + 2
+  let octave = parseInt(keyId.substr(1))
   // Play note
   sampler.triggerAttackRelease(`${note}${octave}`, 1.0);
 }
