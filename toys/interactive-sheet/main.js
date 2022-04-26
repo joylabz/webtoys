@@ -41,6 +41,9 @@ window.addEventListener('keydown', function(e) {
     case 'g':
       playNote('F4')
       break
+    case 'q':
+      stepForward()
+      break
   }
 })
 
