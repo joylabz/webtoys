@@ -45,6 +45,7 @@ window.addEventListener('keydown', function(e) {
 })
 
 window.addEventListener('load', function() {
+  loadSong()
   // Bind clicks to the step notes
   let steps = document.querySelectorAll('svg g[id^="STEP"]')
   for (let i = 0; i < steps.length; i++) {
@@ -78,23 +79,7 @@ window.addEventListener('load', function() {
     onload: () => {
       samplerReady = true
       Tone.Transport.scheduleRepeat((time) => {
-        let step = ((currentStep) % 16) + 1
-        // Get notes on current step
-        let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
-        for (let i = 0; i < notes.length; i++) {
-          activateStepNote(notes[i].id)
-          playNote(notes[i].id)
-        }
-        // Update play head
-        let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
-        for (let i = 0; i < playHead.length; i++) {
-          if ((i+1) === step) {
-            playHead[i].classList.add('active')
-          } else {
-            playHead[i].classList.remove('active')
-          }
-        }
-        currentStep += 1
+        stepForward()
       }, "4n");
     }
   }).toDestination();
@@ -116,6 +101,18 @@ window.addEventListener('load', function() {
   print.addEventListener('click', function() {
     window.open('interactive_sheet_music.pdf', '_blank');
   })
+  let save = document.querySelector('svg g#SAVE')
+  save.addEventListener('click', function() {
+    saveSong()
+  })
+  let step = document.querySelector('svg g#STEP_FORWARD')
+  step.addEventListener('click', function() {
+    stepForward()
+  })
+})
+
+window.addEventListener('hashchange', function() {
+  loadSong()
 })
 
 function toggleSelected(el) {
@@ -188,6 +185,7 @@ function soundNote(id) {
 }
 
 function playNote(id) {
+  if (!samplerReady) return false
   activateKey(id)
   activateHightlight(id)
   soundNote(id)
@@ -198,6 +196,7 @@ function clearNotes() {
   for (let i = 0; i < selectedNotes.length; i++) {
     selectedNotes[i].classList.remove('selected')
   }
+  window.location.hash = ''
 }
 
 function playSong() {
@@ -223,6 +222,63 @@ function printPage() {
   window.print()
 }
 
-function help() {
-  console.log('soon')
+function loadSong() {
+  let hash = window.location.hash.toUpperCase().substring(1)
+  if (hash === '') return false
+  let encodedSteps = hash.split(',')
+  for (let i = 0; i < encodedSteps.length; i++) {
+    let stepNumber = i + 1
+    let encodedStepNotes = encodedSteps[i].split('-')
+    let domStepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} circle`)
+    for (let j = 0; j < domStepNotes.length; j++) {
+      let domStepNote = domStepNotes[j]
+      for (let k = 0; k < encodedStepNotes.length; k++) {
+        let n = encodedStepNotes[k]
+        if (n && domStepNote.id.indexOf(n) !== -1) {
+          domStepNote.classList.add('selected')
+        }
+      }
+    }
+  }
+}
+
+function saveSong() {
+  let song = []
+  let steps = document.querySelectorAll('svg g[id^="STEP"]')
+  for (let i = 0; i < steps.length; i++) {
+    let stepNumber = i + 1
+    song[i] = []
+    let stepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} circle`)
+    for( let j = 0; j < stepNotes.length; j++) {
+      let note = stepNotes[j]
+      if(note.classList.contains('selected')) {
+        let id = note.id.substring(0, 2)
+        song[i].push(id)
+      }
+    }
+  }
+  song = song.map((step) => {
+    return step.join('-')
+  })
+  window.location.hash = song.join(',')
+}
+
+function stepForward() {
+  let step = ((currentStep) % 16) + 1
+  // Get notes on current step
+  let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
+  for (let i = 0; i < notes.length; i++) {
+    activateStepNote(notes[i].id)
+    playNote(notes[i].id)
+  }
+  // Update play head
+  let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
+  for (let i = 0; i < playHead.length; i++) {
+    if ((i+1) === step) {
+      playHead[i].classList.add('active')
+    } else {
+      playHead[i].classList.remove('active')
+    }
+  }
+  currentStep += 1
 }
