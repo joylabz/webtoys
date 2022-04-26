@@ -6,6 +6,44 @@ let samplerReady = false
 let sampler
 let currentStep = 0
 
+window.addEventListener('keydown', function(e) {
+  switch(e.key.toLowerCase()) {
+    case 'arrowup':
+      playNote('C3')
+      break
+    case 'arrowright':
+      playNote('D3')
+      break
+    case 'arrowdown':
+      playNote('E3')
+      break
+    case 'arrowleft':
+      playNote('F3')
+      break
+    case ' ':
+      playNote('G3')
+      break
+    case 'w':
+      playNote('A3')
+      break
+    case 'a':
+      playNote('B3')
+      break
+    case 's':
+      playNote('C4')
+      break
+    case 'd':
+      playNote('D4')
+      break
+    case 'f':
+      playNote('E4')
+      break
+    case 'g':
+      playNote('F4')
+      break
+  }
+})
+
 window.addEventListener('load', function() {
   // Bind clicks to the step notes
   let steps = document.querySelectorAll('svg g[id^="STEP"]')
@@ -16,8 +54,6 @@ window.addEventListener('load', function() {
       let note = notes[j]
       note.addEventListener('click', function(e) {
         toggleSelected(e.target)
-        activateKey(e.target.id)
-        activateHightlight(e.target.id)
         playNote(e.target.id)
       })
     }
@@ -30,8 +66,6 @@ window.addEventListener('load', function() {
     key.addEventListener('click', function(e) {
       // <g> has the ID but only <path> triggers the event
       let keyElement = e.target.parentElement
-      activateKey(keyElement.id)
-      activateHightlight(keyElement.id)
       playNote(keyElement.id)
     })
   }
@@ -48,10 +82,8 @@ window.addEventListener('load', function() {
         // Get notes on current step
         let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
         for (let i = 0; i < notes.length; i++) {
-          playNote(notes[i].id)
           activateStepNote(notes[i].id)
-          activateKey(notes[i].id)
-          activateHightlight(notes[i].id)
+          playNote(notes[i].id)
         }
         // Update play head
         let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
@@ -66,7 +98,6 @@ window.addEventListener('load', function() {
       }, "4n");
     }
   }).toDestination();
-
 
   // Bind controls
   let clear = document.querySelector('svg g#CONTROLS g#CLEAR')
@@ -85,10 +116,6 @@ window.addEventListener('load', function() {
   print.addEventListener('click', function() {
     window.open('interactive_sheet_music.pdf', '_blank');
   })
-  // let help = document.querySelector('svg g#HELP')
-  // help.addEventListener('click', function() {
-  //   window.open('https://www.youtube.com/watch?v=Vwd6v77a-MA', '_blank')
-  // })
 })
 
 function toggleSelected(el) {
@@ -148,7 +175,7 @@ function activateStepNote(id) {
   }, 200)
 }
 
-function playNote(id) {
+function soundNote(id) {
   let keyId = id.split('_')[0]
   // NO BLACK KEYS
   if(keyId.indexOf('black') !== -1) return
@@ -160,6 +187,11 @@ function playNote(id) {
   sampler.triggerAttackRelease(`${note}${octave}`, 1.0);
 }
 
+function playNote(id) {
+  activateKey(id)
+  activateHightlight(id)
+  soundNote(id)
+}
 
 function clearNotes() {
   let selectedNotes = document.querySelectorAll(`svg g[id^="STEP"] .selected`)
