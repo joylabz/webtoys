@@ -1,0 +1,40 @@
+:root {
+  font-size: 1.5vw;
+  font-family: sans-serif;
+  color: #0f43f1;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: white;
+  text-align: center;
+}
+
+a:visited,
+a:active,
+a:link {
+  color: inherit;
+}
+
+ol {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+ol li {
+  width: 30vw;
+  height: 30vw;
+  padding: 1vw;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
