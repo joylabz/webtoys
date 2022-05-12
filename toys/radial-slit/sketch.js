@@ -78,7 +78,7 @@ function uploadToService() {
   canvas.toBlob(function(blob) {
     alert('Wait for it!')
     const formData = new FormData()
-    formData.append('file_input',  new File([blob], `slit_${Date.now()}.jpg`))
+    formData.append('file_input',  new File([blob], `slit_${Date.now()}.png`))
     fetch(
       'https://joylabz-uploads.herokuapp.com/upload',
       { method: 'POST', body: formData }
