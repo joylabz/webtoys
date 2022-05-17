@@ -42,7 +42,7 @@ function selectOne(query) {
 }
 
 function selectAll(query) {
-  return document.querySelectorAll(query)
+  return Array.from(document.querySelectorAll(query))
 }
 
 function runForever(fn, t) {
@@ -256,8 +256,9 @@ function store (state, emitter) {
     'empty': empty,
     'create rectangles': createRectangles,
     'change background on click': changeBackgroundOnClick,
-    'remove element on click': removeElementOnClick,
-    'displace element on click': displaceElementOnClick
+    'remove on click': removeElementOnClick,
+    'displace on click': displaceElementOnClick,
+    'displace on mouse enter': displaceElementOnMouseEnter
   }
 
   emitter.on('run-glitch', (glitchName) => {
@@ -308,13 +309,6 @@ function store (state, emitter) {
     } catch (e) {
       console.log(e)
     }
-
-    try {
-      let obj = {}
-      obj[name] = content
-    } catch (e) {
-      console.log(e)
-    }
     emitter.emit('render')
   })
 
@@ -342,12 +336,32 @@ function start() {
 
 window.addEventListener('load', () => start())
 
-function empty() {
-  // Write your glitch here!
-  alert('Ploft!')
+let empty = () => {
+  /*
+  Write your glitch here!
+  Here are some functions you can use:
+
+  runForever(fn, t)
+  selectOne(query)
+  selectAll(query)
+  setStyle(el, key, value)
+  isInViewport(element)
+  oscillate(phase, frequency, amplitute)
+  random(min, max)
+  map(x, in_min, in_max, out_min, out_max)
+  createElement(tagName, properties, content)
+  whenKeyIsPressed(key, fn)
+  whenKeyIsPressedOnce(key, fn)
+  whenMouseMoves(fn)
+  whenMouseClicks(fn)
+  whenMouseClicksOnce(fn)
+  getElementAt(x, y)
+  getAllElementsAt(x, y)
+  */
+  alert('This is not an alert!')
 }
 
-function createRectangles() {
+let createRectangles = () => {
   let rect = createElement(
     'div',
     {
@@ -365,7 +379,7 @@ function createRectangles() {
   document.body.appendChild(rect)
 }
 
-function changeBackgroundOnClick() {
+let changeBackgroundOnClick = () => {
   // let colors = [ 'red', 'green', 'blue', 'yellow', 'cyan', 'purple', 'grey' ]
   let colors = colorPalette
   whenMouseClicks(function(e) {
@@ -376,7 +390,7 @@ function changeBackgroundOnClick() {
   })
 }
 
-function removeElementOnClick() {
+let removeElementOnClick = () => {
   whenMouseClicks(function(e) {
     let els = getAllElementsAt(e.pageX, e.pageY)
     els = els.filter(el => el.tagName.toLowerCase() != 'body')
@@ -384,12 +398,22 @@ function removeElementOnClick() {
   })
 }
 
-function displaceElementOnClick() {
+let displaceElementOnClick = () => {
   whenMouseClicks(function(e) {
     let els = getAllElementsAt(e.pageX, e.pageY)
     els.forEach((el) => {
       setStyle(el, 'top', `${random(20, 80)}%`)
       setStyle(el, 'left', `${random(20, 80)}%`)
+    })
+  })
+}
+
+let displaceElementOnMouseEnter = () => {
+  let squares = selectAll('body > div')
+  squares.forEach(square => {
+    square.addEventListener('mouseenter', () => {
+      setStyle(square, 'top', `${random(20, 80)}%`)
+      setStyle(square, 'left', `${random(20, 80)}%`)
     })
   })
 }
