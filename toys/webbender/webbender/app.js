@@ -2,11 +2,26 @@ let colorPalette = [
   '#ff3155',
   '#ffed5e',
   '#2daefd',
-  // '#ffaf42',
   '#49f770'
 ]
 
 // LIBRARY
+
+function random(min, max) {
+  if (max) {
+    return min + ((max-min) * Math.random())
+  } else {
+    return min * Math.random()
+  }
+}
+
+function oscillate(phase, frequency, amplitute) {
+  return amplitute * Math.sin(frequency * phase)
+}
+
+function int(n) {
+  return parseInt(n)
+}
 
 function map(x, in_min, in_max, out_min, out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -20,6 +35,78 @@ function isInViewport(element) {
     rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   )
+}
+
+function selectOne(query) {
+  return document.querySelector(query)
+}
+
+function selectAll(query) {
+  return document.querySelectorAll(query)
+}
+
+function runForever(fn, t) {
+  return setInterval(fn, t || 100)
+}
+
+function whenKeyIsPressed(key, fn) {
+  window.addEventListener(
+    'keydown',
+    () => (e.key === key) ? fn() : null
+  )
+}
+
+function whenKeyIsPressedOnce(key, fn) {
+  window.addEventListener(
+    'keydown',
+    () => (e.key === key) ? fn() : null,
+    { once: true }
+  )
+}
+
+function whenMouseMoves(fn) {
+  window.addEventListener('mousemove', fn)
+}
+
+function whenMouseClicks(fn) {
+  window.addEventListener('mousedown', fn)
+}
+
+function whenMouseClicksOnce(fn) {
+  window.addEventListener('mousedown', fn, { once: true })
+}
+
+function getElementAt(x, y) {
+  return document.elementFromPoint(x, y)
+}
+
+function getAllElementsAt(x, y) {
+  let els = document.elementsFromPoint(x, y)
+  let arr = Array.from(els)
+  return arr.filter(el => {
+    return el.id !== 'appxxx'
+    && el.id !== 'toolbar'
+    // && el.tagName.toLowerCase() !== 'body'
+    && el.tagName.toLowerCase() !== 'html'
+  })
+}
+
+function setStyle(el, key, value) {
+  el.style[key] = value
+}
+
+function createElement(tagName, properties, content) {
+  let el = document.createElement(tagName)
+  Object.keys(properties).forEach((id) => {
+    let value = properties[id]
+    console.log(id, value)
+    if (typeof value == "function") {
+      el.addEventListener(id, value)
+    } else {
+      el.setAttribute(id, value)
+    }
+  })
+  return el
 }
 
 // END OF LIBRARY
@@ -157,7 +244,7 @@ function mainView (state, emit) {
 
 // STATE MACHINERY
 function store (state, emitter) {
-  let n = Math.floor(Math.random()*colorPalette.length)
+  let n = 0
   state.primaryColor = colorPalette[n]
   state.secondaryColor = colorPalette[(n + 1) % colorPalette.length]
 
@@ -166,95 +253,11 @@ function store (state, emitter) {
   state.codeMirror = null
 
   state.glitches = {
-    'stroke pulse': () => {
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p) => {
-          if (p.attributes['stroke-width']) {
-            p.attributes['stroke-width'].nodeValue = map(
-              Math.sin(Date.now()/1000),
-              -1, 1,
-              3, 15
-            )
-          }
-        })
-      }, 20)
-    },
-    'stroke pulse 2': () => {
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p, i) => {
-          p.attributes['stroke-width'].nodeValue = map(
-            Math.sin((Date.now()/1000) + (i*0.2)),
-            -1, 1,
-            3, 15
-          )
-        })
-      }, 20)
-    },
-    'stroke pulse 3': () => {
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p, i) => {
-          p.attributes['stroke-width'].nodeValue = map(
-            Math.sin((Date.now()/1000) + (i*0.1)),
-            -1, 1,
-            3, 15
-          )
-        })
-      }, 20)
-    },
-    'stroke pulse 4': () => {
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p, i) => {
-          p.attributes['stroke-width'].nodeValue = map(
-            2*Math.sin((5*Date.now()/1000) + (i*0.2)),
-            -2, 2,
-            3, 15
-          )
-        })
-      }, 20)
-    },
-    'stroke mouse': () => {
-      window.addEventListener('mousemove', (e) => {
-        mouseInterference = e.screenX * 0.01 + e.screenY * 0.01
-      })
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p, i) => {
-          p.attributes['stroke-width'].nodeValue = map(
-            Math.sin(mouseInterference),
-            -1, 1,
-            3, 15
-          )
-        })
-      }, 20)
-    },
-    'stroke react': () => {
-      mousePosition = [0, 0]
-      window.addEventListener('mousemove', (e) => {
-        mousePosition = [e.screenX, e.screenY]
-      })
-      clearInterval(window.pulseInterval || 0)
-      window.pulseInterval = setInterval(() => {
-      	let paths = document.querySelectorAll('svg path')
-        Array.from(paths).forEach((p, i) => {
-          let bounds = p.getBoundingClientRect()
-          let centerX = bounds.left + (bounds.width/2)
-          let centerY = bounds.top + (bounds.height/2)
-          let dx = Math.abs(centerX - mousePosition[0])
-          let dy = Math.abs(centerY - mousePosition[1])
-          let d = Math.hypot(dx, dy)
-          p.attributes['stroke-width'].nodeValue = (1 / d) * window.innerWidth
-        })
-      }, 20)
-    }
+    'empty': empty,
+    'create rectangles': createRectangles,
+    'change background on click': changeBackgroundOnClick,
+    'remove element on click': removeElementOnClick,
+    'displace element on click': displaceElementOnClick
   }
 
   emitter.on('run-glitch', (glitchName) => {
@@ -284,9 +287,6 @@ function store (state, emitter) {
     console.log('log', 'remove-glitch', glitchName)
     try {
       delete state.glitches[glitchName]
-      chrome.storage.local.remove(glitchName, () => {
-        emitter.emit('render')
-      })
     } catch (e) {
       console.log(e)
     }
@@ -312,7 +312,6 @@ function store (state, emitter) {
     try {
       let obj = {}
       obj[name] = content
-      chrome.storage.local.set(obj)
     } catch (e) {
       console.log(e)
     }
@@ -341,14 +340,56 @@ function start() {
   app.mount('#appxxx')
 }
 
-try {
-  start()
-} catch (e) {
-  window.addEventListener('load', () => start())
-}
+window.addEventListener('load', () => start())
 
-
-let empty = () => {
+function empty() {
   // Write your glitch here!
   alert('Ploft!')
+}
+
+function createRectangles() {
+  let rect = createElement(
+    'div',
+    {
+      style: `
+        position: absolute;
+        top: ${random(20, 80)}%;
+        left: ${random(20, 80)}%;
+        width: 10%;
+        height: 10%;
+        background: black;
+        transition: all 0.2s;
+      `
+    }
+  )
+  document.body.appendChild(rect)
+}
+
+function changeBackgroundOnClick() {
+  // let colors = [ 'red', 'green', 'blue', 'yellow', 'cyan', 'purple', 'grey' ]
+  let colors = colorPalette
+  whenMouseClicks(function(e) {
+    let els = getAllElementsAt(e.pageX, e.pageY)
+    els.forEach((el) => {
+      setStyle(el, 'background', colors[int(random(0, colors.length))])
+    })
+  })
+}
+
+function removeElementOnClick() {
+  whenMouseClicks(function(e) {
+    let els = getAllElementsAt(e.pageX, e.pageY)
+    els = els.filter(el => el.tagName.toLowerCase() != 'body')
+    els.forEach((el) => el.remove())
+  })
+}
+
+function displaceElementOnClick() {
+  whenMouseClicks(function(e) {
+    let els = getAllElementsAt(e.pageX, e.pageY)
+    els.forEach((el) => {
+      setStyle(el, 'top', `${random(20, 80)}%`)
+      setStyle(el, 'left', `${random(20, 80)}%`)
+    })
+  })
 }
