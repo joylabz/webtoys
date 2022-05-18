@@ -37,6 +37,16 @@ function isInViewport(element) {
   )
 }
 
+
+function selectStuff() {
+  let tags = [
+    'a', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'img', 'hr', 'br', 'span', 'li',
+    'svg', 'audio', 'video', 'iframe', 'embed', 'path', 'td', 'th', 'tl',
+    'input', 'select', 'textarea', 'radio', 'button', 'canvas', 'i', 'img'
+  ]
+  return document.querySelectorAll(tags.join(', '))
+}
+
 function selectOne(query) {
   return document.querySelector(query)
 }
@@ -99,7 +109,6 @@ function createElement(tagName, properties, content) {
   let el = document.createElement(tagName)
   Object.keys(properties).forEach((id) => {
     let value = properties[id]
-    console.log(id, value)
     if (typeof value == "function") {
       el.addEventListener(id, value)
     } else {
