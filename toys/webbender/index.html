@@ -3,85 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Web Bender Playground</title>
-  <style media="screen">
-    @font-face {
-      font-family: 'Dongle';
-      font-style: regular;
-      font-weight: 400;
-      src: url('webbender/Dongle/Dongle-Regular.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Dongle';
-      font-style: bold;
-      font-weight: 400;
-      src: url('webbender/Dongle/Dongle-Bold.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Dongle';
-      font-style: thin;
-      font-weight: 400;
-      src: url('webbender/Dongle/Dongle-Light.woff2') format('woff2');
-    }
-    * {
-      box-sizing: border-box;
-    }
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Dongle', sans-serif !important;
-      margin: 0;
-    }
-    svg {
-      overflow: hidden;
-    }
-    ul.snippets {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      width: 100%;
-      overflow-x: scroll;
-      padding: 5rem 10rem;
-    }
-
-    ul.snippets li {
-      padding: 2.5rem;
-      margin: 0 1rem;
-      background: rgb(255, 237, 94);
-      border-radius: 0.5rem;
-      box-shadow: 5px 5px 0 #ff3155;
-      color: #ff3155;
-    }
-
-    ul.snippets li pre {
-      background: white;
-      color: #333;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
-
-    h1 {
-      font-size: 5rem;
-      text-align: center;
-      margin: 0;
-    }
-    h2 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
-  </style>
-  <script type="text/javascript">
-  function copyToClipboard(el) {
-        var range = document.createRange()
-        range.selectNode(el)
-        window.getSelection().removeAllRanges() // clear current selection
-        window.getSelection().addRange(range) // to select text
-        document.execCommand("copy")
-        window.getSelection().removeAllRanges()// to deselect
-    }
-  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" charset="utf-8"></script>
 </head>
 <body>
   <svg width="100%" height="100%" viewBox="0 0 1512 982" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,8 +196,7 @@
   <ul class="snippets">
     <li>
       <h2>Everything is rainbow once</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
+      <pre onclick="copyToClipboard(this)">() => {
   let all = selectAll('body *:not(#appxxx)')
   all.forEach((el, i) => {
     let angle = (i*30 + Date.now()*0.1)%360
@@ -282,14 +204,13 @@
     setStyle(el, 'background-color', crazyColor)
     setStyle(el, 'fill', crazyColor)
   })
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
 
     <li>
       <h2>Everything is rainbow all the time</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
+      <pre onclick="copyToClipboard(this)">() => {
   runForever(() => {
     let all = selectAll('body *:not(#appxxx)')
     all.forEach((el, i) => {
@@ -299,14 +220,13 @@
       setStyle(el, 'fill', crazyColor)
     })
   }, 100)
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
 
     <li>
       <h2>Everything is spinning</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
+      <pre onclick="copyToClipboard(this)">() => {
   runForever(() => {
     let all = selectAll('body *')
     all.forEach((el, i) => {
@@ -315,30 +235,29 @@
       setStyle(el, 'transform', `rotate(${angle}deg`)
     })
   }, 100)
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
 
     <li>
-      <h2>Mouse makes spin</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
-  whenMouseMoves(() => {
-    let all = selectAll('body *:not(#appxxx)')
-    all.forEach((el, i) => {
-      let angle = (i*30 + Math.random()*360)%360
+      <h2>Click to spin</h2>
+      <pre onclick="copyToClipboard(this)">() => {
+  whenMouseClicks((e) => {
+    let el = getElementAt(e.clientX, e.clientY)
+    if (el) {
+      let angle = (Date.now() + Math.random()*360)%360
       setStyle(el, 'transition', 'transform 1s')
+      setStyle(el, 'transform-origin', 'center center')
       setStyle(el, 'transform', `rotate(${angle}deg`)
-    })
+    }
   })
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
 
     <li>
       <h2>Click rainbows</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
+      <pre onclick="copyToClipboard(this)">() => {
   whenMouseClicks((e) => {
     let el = getElementAt(e.clientX, e.clientY)
     let angle = (Date.now()*0.1)%360
@@ -346,21 +265,20 @@
     setStyle(el, 'background', crazyColor)
     setStyle(el, 'fill', crazyColor)
   })
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
 
     <li>
       <h2>Click to fall</h2>
-      <pre onclick="copyToClipboard(this)">
-() => {
+      <pre onclick="copyToClipboard(this)">() => {
   whenMouseClicks((e) => {
     let el = getElementAt(e.clientX, e.clientY)
     setStyle(el, 'transition', 'all 1s')
     setStyle(el, 'transform', 'translate(0, 100vh)')
   })
-}
-      </pre>
+}</pre>
+      <button onclick="run(this)">Run</button>
     </li>
   </ul>
 
@@ -1135,6 +1053,173 @@
       </linearGradient>
     </defs>
   </svg>
+
+  <ul class="snippets">
+    <li>
+      <h2>Bubbles</h2>
+      <pre onclick="copyToClipboard(this)">() => {
+  let ball = [
+    random(0.2, 0.8),
+    random(0.2, 0.8)
+  ]
+  let ballEl = createElement('div', {
+    'data-x': ball[0], 'data-y': ball[1],
+    'style': `
+      position: fixed;
+      border: solid 1vw hsl(${random(0, 360)}, 100%, 50%);
+      left: ${100*ball[0]}%;
+      top: ${100*ball[1]}%;
+      width: 5vw;
+      height: 5vw;
+      border-radius: 5vw;
+    `
+  })
+  document.body.appendChild(ballEl)
+
+  let vel = [
+  	random(-0.002, 0.002),
+    random(-0.002, 0.002)
+  ]
+  runForever(() => {
+    let x = parseFloat(ballEl.dataset.x)
+  	let y = parseFloat(ballEl.dataset.y)
+    x += vel[0]
+    y += vel[1]
+    ballEl.style.top = `${y*100}%`
+  	ballEl.style.left = `${x*100}%`
+    ballEl.dataset.x = x
+    ballEl.dataset.y = y
+  }, 20)
+}</pre>
+      <button onclick="run(this)">Run</button>
+    </li>
+
+    <li>
+      <h2>Bouncy ball</h2>
+      <pre onclick="copyToClipboard(this)">() => {
+  let ball = [
+    random(0.2, 0.8),
+    random(0.2, 0.8)
+  ]
+  let ballEl = createElement('div', {
+    'data-x': ball[0], 'data-y': ball[1],
+    'style': `
+      position: fixed;
+      border: solid 1vw hsl(${random(0, 360)}, 100%, 50%);
+      left: ${100*ball[0]}%;
+      top: ${100*ball[1]}%;
+      transform: translate(-50%, -50%);
+      width: 5vw;
+      height: 5vw;
+      border-radius: 5vw;
+    `
+  })
+  document.body.appendChild(ballEl)
+
+  let vel = [
+  	random(-0.002, 0.002),
+    random(-0.002, 0.002)
+  ]
+  runForever(() => {
+    let x = parseFloat(ballEl.dataset.x)
+  	let y = parseFloat(ballEl.dataset.y)
+    if (x + vel[0] < 0.1 || x + vel[0] > 0.9) {
+      vel[0] *= -1
+    }
+    if (y + vel[1] < 0.1 || y + vel[1] > 0.9) {
+      vel[1] *= -1
+    }
+    x += vel[0]
+    y += vel[1]
+    ballEl.style.top = `${y*100}%`
+  	ballEl.style.left = `${x*100}%`
+    ballEl.dataset.x = x
+    ballEl.dataset.y = y
+
+  }, 20)
+}</pre>
+      <button onclick="run(this)">Run</button>
+    </li>
+
+    <li>
+      <h2>Wrecking ball</h2>
+      <pre onclick="copyToClipboard(this)">() => {
+  let ball = [
+    random(0.2, 0.8),
+    random(0.2, 0.8)
+  ]
+  let ballEl = createElement('div', {
+    'data-x': ball[0], 'data-y': ball[1],
+    'style': `
+      position: fixed;
+      border: solid 1vw hsl(${random(0, 360)}, 100%, 50%);
+      left: ${100*ball[0]}%;
+      top: ${100*ball[1]}%;
+      transform: translate(-50%, -50%);
+      width: 5vw;
+      height: 5vw;
+      border-radius: 5vw;
+    `
+  })
+  document.body.appendChild(ballEl)
+
+  let vel = [
+  	random(-0.002, 0.002),
+    random(-0.002, 0.002)
+  ]
+  runForever(() => {
+    let x = parseFloat(ballEl.dataset.x)
+  	let y = parseFloat(ballEl.dataset.y)
+    if (x + vel[0] < 0.1 || x + vel[0] > 0.9) {
+      vel[0] *= -1
+    }
+    if (y + vel[1] < 0.1 || y + vel[1] > 0.9) {
+      vel[1] *= -1
+    }
+    x += vel[0]
+    y += vel[1]
+    ballEl.style.top = `${y*100}%`
+  	ballEl.style.left = `${x*100}%`
+    ballEl.dataset.x = x
+    ballEl.dataset.y = y
+
+    let bounds = ballEl.getBoundingClientRect()
+    let allUnder = getAllElementsAt(
+      bounds.left + (bounds.width/2),
+      bounds.top + (bounds.height/2)
+    )
+    allUnder.forEach((under) => {
+      if (under != ballEl) {
+        switch (under.tagName.toLowerCase()) {
+          case 'div':
+          case 'button':
+          case 'pre':
+          case 'code':
+          case 'li':
+          case 'table':
+          case 'a':
+          case 'p':
+          case 'h1':
+          case 'h2':
+          case 'h3':
+          case 'h4':
+          case 'h5':
+          case 'span':
+          case 'g':
+          case 'path':
+          case 'circle':
+          case 'rect':
+            under.remove()
+            break
+        }
+      }
+    })
+  }, 20)
+}</pre>
+      <button onclick="run(this)">Run</button>
+    </li>
+
+  </ul>
 
 </body>
 </html>
