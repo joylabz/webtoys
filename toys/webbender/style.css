@@ -33,7 +33,7 @@ body {
   margin: 0;
 }
 svg {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 ul.snippets {
   list-style: none;
@@ -91,4 +91,12 @@ button,
   margin: 0.5vh;
   cursor: pointer;
   outline: none;
+}
+
+.gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
 }

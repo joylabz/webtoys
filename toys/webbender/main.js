@@ -62,14 +62,14 @@ function runForever(fn, t) {
 function whenKeyIsPressed(key, fn) {
   window.addEventListener(
     'keydown',
-    () => (e.key === key) ? fn() : null
+    (e) => (e.key === key) ? fn() : null
   )
 }
 
 function whenKeyIsPressedOnce(key, fn) {
   window.addEventListener(
     'keydown',
-    () => (e.key === key) ? fn() : null,
+    (e) => (e.key === key) ? fn() : null,
     { once: true }
   )
 }
