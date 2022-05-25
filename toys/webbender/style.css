@@ -19,6 +19,7 @@
 * {
   box-sizing: border-box;
   position: relative;
+  overflow: visible;
 }
 :root {
   font-size: 1.1vw;
@@ -41,6 +42,7 @@ ul.snippets {
   margin: 0;
   display: flex;
   width: 100%;
+  overflow: visible;
   overflow-x: scroll;
   padding: 5rem 10rem;
   align-items: flex-start
@@ -78,6 +80,12 @@ pre {
   overflow: scroll;
 }
 
+a:link,
+a:visited,
+a:active {
+  text-decoration: none;
+}
+
 button,
 .button {
   border: 0;
@@ -99,4 +107,8 @@ button,
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+}
+
+#download {
+  text-align: center;
 }
