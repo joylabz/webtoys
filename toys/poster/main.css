@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+  position: relative;
+}
+
+:root {
+  font-size: 3vw;
+  --white: #FFF;
+  --leaf: #2BB673;
+  --lime: #62BD48;
+  --banana: #FFDE17;
+  --tangerine: #F15B0F;
+  --almost-black: #252525;
+  --strawberry: #E30D25;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  background: var(--leaf);
+  color: var(--white);
+  font-family: 'Hallo Sans', sans-serif;
+}
+
+body {
+  display: flex;
+  overflow: hidden;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Hallo Sans', sans-serif;
+  outline: none;
+  border: none;
+  box-shadow: 0.1rem 0.1rem 0 var(--almost-black);
+  background: var(--white);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.4rem;
+  font-size: 0.6rem;
+  color: var(--white);
+  cursor: pointer;
+}
+
+button[disabled="disabled"] {
+  pointer-events: none;
+  opacity: 0.1;
+}
+
+button.primary {
+  background: var(--banana);
+  color: var(--white);
+}
+button.secundary {
+  background: var(--tangerine);
+  color: var(--white);
+}
+
+button img {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+}
+
+button.appendix {
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--tangerine);
+  color: var(--white);
+  font-size: 0.5rem;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+  box-shadow: none;
+}
+
+button.appendix img {
+  width: 80%;
+  height: 80%;
+}
+
+#app {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#display {
+  width: 70vw;
+  height: 90vh;
+  background: var(--white);
+  box-shadow: 0.2rem 0.2rem var(--almost-black);
+  border-radius: 0.8rem;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+/* #display img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+} */
+
+#display button {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+#toolbar {
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#uploader,
+#keys {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0.25rem 0;
+}
+
+#uploader {
+  /* background: var(--white); */
+  /* box-shadow: 0.2rem 0.2rem var(--almost-black); */
+  padding: 1rem;
+  width: 95%;
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#keys button {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0.3rem;
+  border-radius: 0.4rem;
+}

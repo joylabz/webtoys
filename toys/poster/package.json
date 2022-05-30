@@ -1,0 +1,16 @@
+{
+  "name": "poster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "choo": "^7.1.0",
+    "parcel-bundler": "^1.12.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "browserify build_lib.js > lib.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
