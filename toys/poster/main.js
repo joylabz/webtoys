@@ -40,6 +40,7 @@ function store(state, emitter) {
   })
   emitter.on('key-down', (key) => {
     if (KEYS.indexOf(key) !== -1) {
+      emitter.emit('select-key', key)
       if (!state.keyPressed[key]) {
         if (state.images[key]) {
           state.display = state.images[key]
