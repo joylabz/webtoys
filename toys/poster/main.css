@@ -133,8 +133,8 @@ button.appendix img {
 }
 
 #uploader {
-  /* background: var(--white); */
-  /* box-shadow: 0.2rem 0.2rem var(--almost-black); */
+  background: var(--white);
+  box-shadow: 0.2rem 0.2rem var(--almost-black);
   padding: 1rem;
   width: 95%;
   border-radius: 0.8rem;
