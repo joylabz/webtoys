@@ -132,6 +132,7 @@ function mainView(state, emit) {
     <div id="app">
       ${Display(state, emit)}
       <div id="toolbar">
+        <img src="logo.png" width="70%" style="align-self: center;" alt="Makey Makey Interactive Poster" />
         ${Uploader(state, emit)}
         ${Keys(state, emit)}
       </div>
