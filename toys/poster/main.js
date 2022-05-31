@@ -187,11 +187,21 @@ function Uploader(state, emit) {
 
 function Keys(state, emit) {
   let buttons = KEYS.map((key) => {
-    let image = html`<img src="icons/${key}.png" alt="${key}" />`
-    let primary = state.selectedKey === key ? 'primary' : null
+    let imageName = key === ' ' ? '_' : key
+    let image = html`<img src="icons/${imageName}.png" alt="${key}" />`
+    let classList = []
+
+    if (state.selectedKey === key) {
+      classList.push('primary')
+    } else if (state.sounds[key] === null && state.images[key] === null) {
+      classList.push('empty')
+    }
+
+    classList = classList.join(' ')
+
     return html`
-      <button class="${primary}" onclick=${() => emit('select-key', key)}>
-        ${key !== ' ' ? image : null}
+      <button class="${classList}" onclick=${() => emit('select-key', key)}>
+        ${image}
       </button>
     `
   })

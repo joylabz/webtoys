@@ -102,12 +102,6 @@ button.appendix img {
   background-position: center;
 }
 
-/* #display img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-} */
-
 #display button {
   position: absolute;
   right: 0.5rem;
@@ -149,4 +143,8 @@ button.appendix img {
   height: 1.4rem;
   margin: 0.3rem;
   border-radius: 0.4rem;
+}
+
+#keys button.empty {
+  opacity: 0.5;
 }
