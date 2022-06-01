@@ -189,7 +189,7 @@ function Uploader(state, emit) {
 
 function Keys(state, emit) {
   let buttons = KEYS.map((key) => {
-    let imageName = key === ' ' ? '_' : key
+    let imageName = key === ' ' ? 'space' : key
     let image = html`<img src="icons/${imageName}.png" alt="${key}" />`
     let classList = []
 
