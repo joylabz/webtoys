@@ -118,8 +118,7 @@ button.appendix img {
   align-items: flex-start;
 }
 
-#uploader,
-#keys {
+#toolbar > * {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
