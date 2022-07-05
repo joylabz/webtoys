@@ -86,6 +86,7 @@ button {
 
 
 /* COMPONENT STYLE */
+
 .card,
 .button {
   cursor: pointer !important;
@@ -102,8 +103,29 @@ button {
   box-shadow: calc(var(--wbbasesize) * 0.2) calc(var(--wbbasesize) * 0.2) 0 var(--red) !important;
 }
 
+
+.expand {
+  animation-name: expand;
+  animation-duration: 0.15s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  transform: scaleY(0.5);
+  opacity: 0;
+}
+
+@keyframes expand {
+  from {
+    transform: scaleY(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1.0;
+  }
+}
+
 .button {
-  height: calc(var(--wbbasesize) * 4.8)
+  height: calc(var(--wbbasesize) * 4.8);
 }
 
 .button.accent,
@@ -159,9 +181,9 @@ button {
   line-height: calc(var(--wbbasesize) * 3.6) !important;
   font-size: calc(var(--wbbasesize) * 1.6) !important;
   border-radius: calc(var(--wbbasesize) * 3.6) !important;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .button-round.close {
-  transform: rotate(45deg);
+  transform: rotate(45deg) !important;
 }
