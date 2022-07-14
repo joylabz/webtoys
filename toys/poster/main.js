@@ -100,7 +100,7 @@ function store(state, emitter) {
     {
       text: html`
         <p>
-          Click on the big red button to clean everyting. This will reset the
+          Click on the big red button to clear everything. This will reset the
           app to the initial configuration.
         </p>
       `,
