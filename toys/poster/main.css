@@ -16,6 +16,7 @@
 
 body,
 html {
+  margin: 0;
   width: 100%;
   height: 100%;
   background: var(--leaf);
@@ -25,7 +26,6 @@ html {
 
 body {
   display: flex;
-  overflow: hidden;
 }
 
 button {
@@ -70,17 +70,10 @@ button.appendix {
   height: 0.6rem;
   background: var(--tangerine);
   color: var(--white);
-  font-size: 0.5rem;
-  position: absolute;
-  top: -0.3rem;
-  right: -0.3rem;
   box-shadow: none;
 }
 
-button.appendix img {
-  width: 80%;
-  height: 80%;
-}
+
 
 #app {
   width: 100%;
@@ -102,20 +95,14 @@ button.appendix img {
   background-position: center;
 }
 
-#display button {
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
 #toolbar {
+  height: 90vh;
   width: 25vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
+  transition: transform 0.2s;
 }
 
 #toolbar > * {
@@ -123,6 +110,11 @@ button.appendix img {
   flex-direction: row;
   flex-wrap: wrap;
   margin: 0.25rem 0;
+}
+
+#logo {
+  align-self: center;
+  width: 60%;
 }
 
 #uploader {
@@ -137,6 +129,18 @@ button.appendix img {
   align-items: center;
 }
 
+#uploader button.appendix {
+  font-size: 0.5rem;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+}
+
+#uploader button.appendix img {
+  width: 80%;
+  height: 80%;
+}
+
 #keys button {
   width: 1.4rem;
   height: 1.4rem;
@@ -146,4 +150,92 @@ button.appendix img {
 
 #keys button.empty {
   opacity: 0.5;
+}
+
+#help-button {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#help-button button.appendix {
+  font-size: 0.5rem;
+  top: -0.3rem;
+  right: -0.3rem;
+  background: var(--lime);
+}
+
+#help {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#help #highligh {
+  position: absolute;
+  box-shadow: 0 0 0 200vw rgba(43, 182, 115, 0.9);
+  transition: all 0.2s;
+  pointer-events: none;
+}
+
+#help #dialog {
+  position: absolute;
+  width: 9rem;
+  pointer-events: all;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  box-shadow: 0.1rem 0.1rem 0 var(--almost-black);
+  background: var(--white);
+  cursor: pointer;
+
+  font-family: 'Hallo Sans', sans-serif;
+  font-size: 0.5rem;
+  color: var(--almost-black);
+  text-align: center;
+  font-weight: bold;
+
+  transition: all 0.2s;
+}
+
+#help #controls {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+}
+
+#help button {
+  height: 1.5rem;
+  width: 47.5%;
+  color: var(--almost-black);
+  margin: 0 0.25rem;
+  font-weight: bold;
+}
+
+#help button.close {
+  background: var(--tangerine);
+  color: var(--white);
+}
+
+#help button.next {
+  background: var(--leaf);
+  color: var(--white);
+}
+
+#help p {
+  margin: 0;
+}
+
+@media (min-aspect-ratio: 4/2) {
+  #toolbar {
+    transform: scale(70%);
+  }
 }

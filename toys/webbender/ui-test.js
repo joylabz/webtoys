@@ -86,8 +86,9 @@ function store(state, emitter) {
   }
   state.glitches = {}
   state.packs = {}
-  state.context = new AudioContext()
-
+  state.toolbar = []
+  state.selectedGlitch = null
+  state.isInventoryOpen = false
 
   for (let i = 0; i < 100; i++) {
     state.glitches[`test ${i}`] = genTest(i)
@@ -102,10 +103,6 @@ function store(state, emitter) {
     }
     return acc
   }, {})
-
-  state.toolbar = []
-  state.selectedGlitch = null
-  state.isInventoryOpen = false
 
   emitter.on('select-glitch', (key) => {
     state.isInventoryOpen = false
@@ -142,43 +139,6 @@ function store(state, emitter) {
     emitter.emit('render')
     emitter.emit('sound-effect')
   })
-
-  emitter.on('sound-effect', () => {
-    const o = state.context.createOscillator()
-    const  g = state.context.createGain()
-    o.connect(g)
-    g.connect(state.context.destination)
-    o.frequency.value = scale[parseInt(Math.random()*(scale.length-1))]
-    o.start(0)
-    g.gain.exponentialRampToValueAtTime(
-      0.00001, state.context.currentTime + 0.5
-    )
-  })
-
-
-  emitter.on('sound-effect-inventory', () => {
-    var starttime = state.context.currentTime;
-    var nextNotetime = state.context.currentTime;
-    function scheduler() {
-      while(nextNotetime < state.context.currentTime + 0.02) {
-          nextNotetime += 0.02;
-      }
-      const o = state.context.createOscillator()
-      const  g = state.context.createGain()
-      o.connect(g)
-      g.connect(state.context.destination)
-      o.frequency.value = scale[parseInt(Math.random()*scale.length-1)]
-      o.start(0)
-      g.gain.exponentialRampToValueAtTime(
-        0.00001, state.context.currentTime + 0.5
-      )
-      if (nextNotetime-starttime < 0.2) {
-        window.setTimeout(scheduler, 100.0);
-      }
-    }
-    scheduler()
-  })
-
 }
 
 window.addEventListener('load', () => {
