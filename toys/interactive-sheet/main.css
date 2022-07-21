@@ -4,37 +4,79 @@ body {
   width: 100%;
   height: 100vh;
   display: flex;
-  cursor: pointer;
 }
 body > svg {
   margin: auto;
   height: 100%;
 }
 
-svg g[id^="STEP"] circle {
+svg #SHEET,
+svg #PLAYHEAD {
+  pointer-events: none;
+}
+svg g#STEPS g[id^="STEP"] ellipse {
   cursor: pointer;
+  transition: all 0.1s;
+  opacity: 0;
+}
+
+svg g#STEPS g[id^="STEP"] ellipse.selected {
+  fill: black;
+  opacity: 1;
+}
+svg g#STEPS g[id^="STEP"] ellipse:hover {
+  opacity: 1;
+}
+
+svg g#KEYS {
+  cursor: pointer;
+}
+
+svg g#KEYS g path {
   transition: all 0.1s;
 }
 
-svg g[id^="STEP"] circle.selected {
-  fill-opacity: 1;
+svg g#STEPS ellipse[id^="C"],
+svg g#STEPS ellipse[id^="C"].selected,
+svg g[id="KEYS"] g[id^="C"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="C"] path[id^="BOTTOM"] {
+  fill: hsl(0deg, 100%, 50%);
 }
-svg g[id^="STEP"] circle:hover {
-  fill-opacity: 0.8;
+svg g#STEPS ellipse[id^="D"],
+svg g#STEPS ellipse[id^="D"].selected,
+svg g[id="KEYS"] g[id^="D"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="D"] path[id^="BOTTOM"] {
+  fill: hsl(30deg, 100%, 50%);
 }
-svg g[id^="STEP"] circle.active {
-  fill: red;
+svg g#STEPS ellipse[id^="E"],
+svg g#STEPS ellipse[id^="E"].selected,
+svg g[id="KEYS"] g[id^="E"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="E"] path[id^="BOTTOM"] {
+  fill: hsl(60deg, 100%, 50%);
 }
-
-svg g[id="KEYS"] {
-  cursor: pointer;
-  transition: all 0.1s;
+svg g#STEPS ellipse[id^="F"],
+svg g#STEPS ellipse[id^="F"].selected,
+svg g[id="KEYS"] g[id^="F"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="F"] path[id^="BOTTOM"] {
+  fill: hsl(120deg, 100%, 50%);
 }
-svg g[id="KEYS"] g path {
-  transition: all 0.1s;
+svg g#STEPS ellipse[id^="G"],
+svg g#STEPS ellipse[id^="G"].selected,
+svg g[id="KEYS"] g[id^="G"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="G"] path[id^="BOTTOM"] {
+  fill: hsl(180deg, 100%, 50%);
 }
-svg g[id="KEYS"] g.active path {
-  fill: red;
+svg g#STEPS ellipse[id^="A"],
+svg g#STEPS ellipse[id^="A"].selected,
+svg g[id="KEYS"] g[id^="A"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="A"] path[id^="BOTTOM"] {
+  fill: hsl(250deg, 100%, 50%);
+}
+svg g#STEPS ellipse[id^="B"],
+svg g#STEPS ellipse[id^="B"].selected,
+svg g[id="KEYS"] g[id^="B"] path[id^="TOP"],
+svg g[id="KEYS"] g[id^="B"] path[id^="BOTTOM"] {
+  fill: hsl(300deg, 100%, 50%);
 }
 
 svg g[id="NOTEHIGHLIGHT"] circle {
@@ -53,6 +95,9 @@ svg g[id="CONTROLS"] .active path:last-child {
   fill: red;
 }
 
-svg g#PLAY_HEAD > rect[id^="PLAY"].active {
-  fill-opacity: 1;
+svg g#PLAYHEAD > path {
+  opacity: 0.01 !important;
+}
+svg g#PLAYHEAD > path.active {
+  opacity: 1 !important;
 }

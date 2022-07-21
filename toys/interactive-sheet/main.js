@@ -50,24 +50,25 @@ window.addEventListener('keydown', function(e) {
 window.addEventListener('load', function() {
   loadSong()
   // Bind clicks to the step notes
-  let steps = document.querySelectorAll('svg g[id^="STEP"]')
+  let steps = document.querySelectorAll('svg #STEPS > g[id^="STEP"]')
   for (let i = 0; i < steps.length; i++) {
     let step = steps[i]
-    let notes = step.querySelectorAll('circle')
+    let notes = step.querySelectorAll('ellipse')
     for (let j = 0; j < notes.length; j++) {
       let note = notes[j]
-      note.addEventListener('click', function(e) {
+      note.addEventListener('mousedown', function(e) {
         toggleSelected(e.target)
-        playNote(e.target.id)
+        console.log(e.target)
+        playNote(e.target.id.substr(0, 2))
       })
     }
   }
 
   // Bind clicks to the piano keys
-  let keys = document.querySelectorAll('svg g#KEYS > g')
+  let keys = document.querySelectorAll('svg g[id="KEYS"] > g > path')
   for (let i = 0; i < keys.length; i++) {
     let key = keys[i]
-    key.addEventListener('click', function(e) {
+    key.addEventListener('mousedown', function(e) {
       // <g> has the ID but only <path> triggers the event
       let keyElement = e.target.parentElement
       playNote(keyElement.id)
@@ -109,7 +110,7 @@ window.addEventListener('load', function() {
     saveSong()
   })
   let step = document.querySelector('svg g#STEP_FORWARD')
-  step.addEventListener('click', function() {
+  step.addEventListener('mousedown', function() {
     stepForward()
   })
 })
@@ -122,59 +123,6 @@ function toggleSelected(el) {
   el.classList.toggle('selected')
 }
 
-function activateKey(id) {
-  // Get only first part of ID in case it's duplicated
-  let keyId = id.split('_')[0]
-  // NO BLACK KEYS
-  if(keyId.indexOf('black') !== -1) return
-  // Get key
-  let key = document.querySelector(`svg g#KEYS > g[id^="${keyId}"]`)
-  // Activate key
-  key.classList.add('active')
-  // Clear previous timeout
-  if (!keyTimeouts[keyId]) keyTimeouts[keyId] = 0
-  clearTimeout(keyTimeouts[keyId])
-  // Add new timeout
-  keyTimeouts[keyId] = setTimeout(function() {
-    key.classList.remove('active')
-  }, 200)
-}
-
-function activateHightlight(id) {
-  // Get only first part of ID in case it's duplicated
-  let keyId = id.split('_')[0]
-  // NO BLACK KEYS
-  if(keyId.indexOf('black') !== -1) return
-  // Get hightlight element
-  let highlight = document.querySelector(`svg g#NOTEHIGHLIGHT circle[id^="${keyId}"]`)
-  // Activate highlight
-  highlight.classList.add('active')
-  // Clear previous timeout
-  if (!highlightTimeouts[keyId]) highlightTimeouts[keyId] = 0
-  clearTimeout(highlightTimeouts[keyId])
-  // Add new timeout
-  highlightTimeouts[keyId] = setTimeout(function() {
-    highlight.classList.remove('active')
-  }, 200)
-}
-
-function activateStepNote(id) {
-  // Get only first part of ID in case it's duplicated
-  let keyId = id.split('_')[0]
-  let step = (currentStep % 16) + 1
-  // Get hightlight element
-  let highlight = document.querySelector(`svg g#STEP${step} circle[id^="${keyId}"].selected`)
-  // Activate highlight
-  highlight.classList.add('active')
-  // Clear previous timeout
-  if (!stepNoteTimeouts[keyId]) stepNoteTimeouts[keyId] = 0
-  clearTimeout(stepNoteTimeouts[keyId])
-  // Add new timeout
-  stepNoteTimeouts[keyId] = setTimeout(function() {
-    highlight.classList.remove('active')
-  }, 200)
-}
-
 function soundNote(id) {
   let keyId = id.split('_')[0]
   // NO BLACK KEYS
@@ -184,13 +132,13 @@ function soundNote(id) {
   // Apply octave modifier
   let octave = parseInt(keyId.substr(1))
   // Play note
-  sampler.triggerAttackRelease(`${note}${octave}`, 1.0);
+  if (note) {
+    sampler.triggerAttackRelease(`${note}${octave}`, 1.0);
+  }
 }
 
 function playNote(id) {
   if (!samplerReady) return false
-  activateKey(id)
-  activateHightlight(id)
   soundNote(id)
 }
 
@@ -212,17 +160,8 @@ function playSong() {
 function stopSong() {
   Tone.Transport.stop()
   currentStep = 0
-
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.remove('active')
-
-  let playHead = document.querySelector('svg g#PLAY_HEAD > rect[id^="PLAY"].active')
-  playHead.classList.remove('active')
-
-}
-
-function printPage() {
-  window.print()
 }
 
 function loadSong() {
@@ -230,9 +169,9 @@ function loadSong() {
   if (hash === '') return false
   let encodedSteps = hash.split(',')
   for (let i = 0; i < encodedSteps.length; i++) {
-    let stepNumber = i + 1
+    let stepNumber = String(i + 1).padStart(2, '0')
     let encodedStepNotes = encodedSteps[i].split('-')
-    let domStepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} circle`)
+    let domStepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} ellipse`)
     for (let j = 0; j < domStepNotes.length; j++) {
       let domStepNote = domStepNotes[j]
       for (let k = 0; k < encodedStepNotes.length; k++) {
@@ -247,11 +186,11 @@ function loadSong() {
 
 function saveSong() {
   let song = []
-  let steps = document.querySelectorAll('svg g[id^="STEP"]')
+  let steps = document.querySelectorAll('svg #STEPS g[id^="STEP"]')
   for (let i = 0; i < steps.length; i++) {
-    let stepNumber = i + 1
+    let stepNumber = String(i + 1).padStart(2, '0')
     song[i] = []
-    let stepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} circle`)
+    let stepNotes = document.querySelectorAll(`svg #STEPS g#STEP${stepNumber} ellipse`)
     for( let j = 0; j < stepNotes.length; j++) {
       let note = stepNotes[j]
       if(note.classList.contains('selected')) {
@@ -267,11 +206,23 @@ function saveSong() {
 }
 
 function stepForward() {
-  let step = ((currentStep) % 16) + 1
+  let step = String( ((currentStep) % 16) + 1 ).padStart(2, '0')
+
+  let playHeads = Array.from(document.querySelectorAll('svg #PLAYHEAD > path')).reverse()
+
+  for (let i = 0; i < playHeads.length; i++) {
+    let playHead = playHeads[i]
+    if (i == (currentStep % 16)) {
+      playHead.classList.add('active')
+    } else {
+      playHead.classList.remove('active')
+    }
+  }
+
+
   // Get notes on current step
   let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
   for (let i = 0; i < notes.length; i++) {
-    activateStepNote(notes[i].id)
     playNote(notes[i].id)
   }
   // Update play head
