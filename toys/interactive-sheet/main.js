@@ -1,7 +1,5 @@
 // TIMEOUT GLOBALS
-let keyTimeouts = {}
-let highlightTimeouts =  {}
-let stepNoteTimeouts =  {}
+let pressTimeouts =  {}
 let samplerReady = false
 let sampler
 let currentStep = 0
@@ -57,7 +55,7 @@ window.addEventListener('load', function() {
     for (let j = 0; j < notes.length; j++) {
       let note = notes[j]
       note.addEventListener('mousedown', function(e) {
-        toggleSelected(e.target)
+        e.target.classList.toggle('selected')
         console.log(e.target)
         playNote(e.target.id.substr(0, 2))
       })
@@ -119,10 +117,6 @@ window.addEventListener('hashchange', function() {
   loadSong()
 })
 
-function toggleSelected(el) {
-  el.classList.toggle('selected')
-}
-
 function soundNote(id) {
   let keyId = id.split('_')[0]
   // NO BLACK KEYS
@@ -137,9 +131,21 @@ function soundNote(id) {
   }
 }
 
+function pressKey(id) {
+  let keyId = id.split('_')[0]
+  // Get key group element
+  let key = document.querySelector(`svg g[id="KEYS"] > g#${keyId}`)
+  key.classList.add('pressing')
+  if (pressTimeouts[id]) clearTimeout(pressTimeouts[id])
+  pressTimeouts[id] = setTimeout(() => {
+    key.classList.remove('pressing')
+  }, 100)
+}
+
 function playNote(id) {
   if (!samplerReady) return false
   soundNote(id)
+  pressKey(id)
 }
 
 function clearNotes() {
@@ -160,8 +166,12 @@ function playSong() {
 function stopSong() {
   Tone.Transport.stop()
   currentStep = 0
+  // Update play button
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.remove('active')
+  // Update play head
+  let playHead = document.querySelector('svg #PLAYHEAD .active')
+  if (playHead) playHead.classList.remove('active')
 }
 
 function loadSong() {
@@ -206,10 +216,11 @@ function saveSong() {
 }
 
 function stepForward() {
+  // Get the step number pedded with 0
   let step = String( ((currentStep) % 16) + 1 ).padStart(2, '0')
-
+  // All the playhead elements
   let playHeads = Array.from(document.querySelectorAll('svg #PLAYHEAD > path')).reverse()
-
+  // Toggle playhead active class
   for (let i = 0; i < playHeads.length; i++) {
     let playHead = playHeads[i]
     if (i == (currentStep % 16)) {
@@ -218,14 +229,12 @@ function stepForward() {
       playHead.classList.remove('active')
     }
   }
-
-
   // Get notes on current step
   let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
   for (let i = 0; i < notes.length; i++) {
     playNote(notes[i].id)
   }
-  // Update play head
+  // Update play button
   let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
   for (let i = 0; i < playHead.length; i++) {
     if ((i+1) === step) {

@@ -21,8 +21,9 @@ svg g#STEPS g[id^="STEP"] ellipse {
 }
 
 svg g#STEPS g[id^="STEP"] ellipse.selected {
-  fill: black;
   opacity: 1;
+  stroke: black;
+  stroke-width: 2;
 }
 svg g#STEPS g[id^="STEP"] ellipse:hover {
   opacity: 1;
@@ -38,53 +39,52 @@ svg g#KEYS g path {
 
 svg g#STEPS ellipse[id^="C"],
 svg g#STEPS ellipse[id^="C"].selected,
-svg g[id="KEYS"] g[id^="C"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="C"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="C"] path[id^="TOP"],
+svg g#KEYS g[id^="C"] path[id^="BOTTOM"] {
   fill: hsl(0deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="D"],
 svg g#STEPS ellipse[id^="D"].selected,
-svg g[id="KEYS"] g[id^="D"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="D"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="D"] path[id^="TOP"],
+svg g#KEYS g[id^="D"] path[id^="BOTTOM"] {
   fill: hsl(30deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="E"],
 svg g#STEPS ellipse[id^="E"].selected,
-svg g[id="KEYS"] g[id^="E"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="E"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="E"] path[id^="TOP"],
+svg g#KEYS g[id^="E"] path[id^="BOTTOM"] {
   fill: hsl(60deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="F"],
 svg g#STEPS ellipse[id^="F"].selected,
-svg g[id="KEYS"] g[id^="F"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="F"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="F"] path[id^="TOP"],
+svg g#KEYS g[id^="F"] path[id^="BOTTOM"] {
   fill: hsl(120deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="G"],
 svg g#STEPS ellipse[id^="G"].selected,
-svg g[id="KEYS"] g[id^="G"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="G"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="G"] path[id^="TOP"],
+svg g#KEYS g[id^="G"] path[id^="BOTTOM"] {
   fill: hsl(180deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="A"],
 svg g#STEPS ellipse[id^="A"].selected,
-svg g[id="KEYS"] g[id^="A"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="A"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="A"] path[id^="TOP"],
+svg g#KEYS g[id^="A"] path[id^="BOTTOM"] {
   fill: hsl(250deg, 100%, 50%);
 }
 svg g#STEPS ellipse[id^="B"],
 svg g#STEPS ellipse[id^="B"].selected,
-svg g[id="KEYS"] g[id^="B"] path[id^="TOP"],
-svg g[id="KEYS"] g[id^="B"] path[id^="BOTTOM"] {
+svg g#KEYS g[id^="B"] path[id^="TOP"],
+svg g#KEYS g[id^="B"] path[id^="BOTTOM"] {
   fill: hsl(300deg, 100%, 50%);
 }
 
-svg g[id="NOTEHIGHLIGHT"] circle {
-  transition: all 0.1s;
+svg g#KEYS g.pressing path[id^="TOP"] {
+  transform: translateY(0.2%);
 }
-svg g[id="NOTEHIGHLIGHT"] circle.active {
-  fill-opacity: 1;
-  fill: red;
+svg g#KEYS g.pressing path[id^="BOTTOM"] {
+  transform: translateY(-0.2%);
 }
 
 svg g[id="CONTROLS"] {
