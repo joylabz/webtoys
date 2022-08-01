@@ -41,43 +41,43 @@ svg g#STEPS ellipse[id^="C"],
 svg g#STEPS ellipse[id^="C"].selected,
 svg g#KEYS g[id^="C"] path[id^="TOP"],
 svg g#KEYS g[id^="C"] path[id^="BOTTOM"] {
-  fill: hsl(0deg, 100%, 50%);
+  fill: #FF082D;
 }
 svg g#STEPS ellipse[id^="D"],
 svg g#STEPS ellipse[id^="D"].selected,
 svg g#KEYS g[id^="D"] path[id^="TOP"],
 svg g#KEYS g[id^="D"] path[id^="BOTTOM"] {
-  fill: hsl(30deg, 100%, 50%);
+  fill: #FF931E;
 }
 svg g#STEPS ellipse[id^="E"],
 svg g#STEPS ellipse[id^="E"].selected,
 svg g#KEYS g[id^="E"] path[id^="TOP"],
 svg g#KEYS g[id^="E"] path[id^="BOTTOM"] {
-  fill: hsl(60deg, 100%, 50%);
+  fill: #FFF34F;
 }
 svg g#STEPS ellipse[id^="F"],
 svg g#STEPS ellipse[id^="F"].selected,
 svg g#KEYS g[id^="F"] path[id^="TOP"],
 svg g#KEYS g[id^="F"] path[id^="BOTTOM"] {
-  fill: hsl(120deg, 100%, 50%);
+  fill: #00FF00;
 }
 svg g#STEPS ellipse[id^="G"],
 svg g#STEPS ellipse[id^="G"].selected,
 svg g#KEYS g[id^="G"] path[id^="TOP"],
 svg g#KEYS g[id^="G"] path[id^="BOTTOM"] {
-  fill: hsl(180deg, 100%, 50%);
+  fill: #00A28B;
 }
 svg g#STEPS ellipse[id^="A"],
 svg g#STEPS ellipse[id^="A"].selected,
 svg g#KEYS g[id^="A"] path[id^="TOP"],
 svg g#KEYS g[id^="A"] path[id^="BOTTOM"] {
-  fill: hsl(250deg, 100%, 50%);
+  fill: #5540BF;
 }
 svg g#STEPS ellipse[id^="B"],
 svg g#STEPS ellipse[id^="B"].selected,
 svg g#KEYS g[id^="B"] path[id^="TOP"],
 svg g#KEYS g[id^="B"] path[id^="BOTTOM"] {
-  fill: hsl(300deg, 100%, 50%);
+  fill: #FF00FF;
 }
 
 svg g#KEYS g.pressing path[id^="TOP"] {

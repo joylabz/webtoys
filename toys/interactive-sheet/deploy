@@ -1,0 +1,2 @@
+#!/bin/sh
+aws s3 sync ./ s3://apps.makeymakey.com/interactive-sheet --exclude '.*' --acl public-read

@@ -1,8 +1,9 @@
 // TIMEOUT GLOBALS
 let pressTimeouts =  {}
 let samplerReady = false
-let sampler
+let sampler = null
 let currentStep = 0
+let recording = false
 
 window.addEventListener('keydown', function(e) {
   switch(e.key.toLowerCase()) {
@@ -45,6 +46,46 @@ window.addEventListener('keydown', function(e) {
   }
 })
 
+window.addEventListener('keydown', function(e) {
+  if (recording) {
+    switch(e.key.toLowerCase()) {
+      case 'arrowup':
+      recordNote('C3')
+      break
+      case 'arrowright':
+      recordNote('D3')
+      break
+      case 'arrowdown':
+      recordNote('E3')
+      break
+      case 'arrowleft':
+      recordNote('F3')
+      break
+      case ' ':
+      recordNote('G3')
+      break
+      case 'w':
+      recordNote('A3')
+      break
+      case 'a':
+      recordNote('B3')
+      break
+      case 's':
+      recordNote('C4')
+      break
+      case 'd':
+      recordNote('D4')
+      break
+      case 'f':
+      recordNote('E4')
+      break
+      case 'g':
+      recordNote('F4')
+      break
+    }
+  }
+})
+
 window.addEventListener('load', function() {
   loadSong()
   // Bind clicks to the step notes
@@ -56,7 +97,6 @@ window.addEventListener('load', function() {
       let note = notes[j]
       note.addEventListener('mousedown', function(e) {
         e.target.classList.toggle('selected')
-        console.log(e.target)
         playNote(e.target.id.substr(0, 2))
       })
     }
@@ -69,7 +109,11 @@ window.addEventListener('load', function() {
     key.addEventListener('mousedown', function(e) {
       // <g> has the ID but only <path> triggers the event
       let keyElement = e.target.parentElement
-      playNote(keyElement.id)
+      let id = keyElement.id.substr(0, 2)
+      playNote(id)
+      if (recording) {
+        recordNote(id)
+      }
     })
   }
 
@@ -107,16 +151,36 @@ window.addEventListener('load', function() {
   save.addEventListener('click', function() {
     saveSong()
   })
-  let step = document.querySelector('svg g#STEP_FORWARD')
-  step.addEventListener('mousedown', function() {
-    stepForward()
+
+  let record = document.querySelector('svg g#RECORD')
+  record.addEventListener('click', function() {
+    recording = !recording
+    if (recording) {
+      record.classList.add('active')
+    } else {
+      record.classList.remove('active')
+    }
   })
+
 })
 
 window.addEventListener('hashchange', function() {
   loadSong()
 })
 
+
+/*
+ * Handles requests to play note. Triggers audio, adds visual cue
+ */
+function playNote(id) {
+  if (!samplerReady) return false
+  soundNote(id)
+  pressKey(id)
+}
+
+/*
+ * Triggers the sound engine to play note given an ID
+ */
 function soundNote(id) {
   let keyId = id.split('_')[0]
   // NO BLACK KEYS
@@ -131,6 +195,9 @@ function soundNote(id) {
   }
 }
 
+/*
+ * Adds visual cue that the keyboard key is beeing pressed
+ */
 function pressKey(id) {
   let keyId = id.split('_')[0]
   // Get key group element
@@ -142,12 +209,24 @@ function pressKey(id) {
   }, 100)
 }
 
-function playNote(id) {
-  if (!samplerReady) return false
-  soundNote(id)
-  pressKey(id)
+/**
+ * Add note to sheet on current step
+ */
+function recordNote(id) {
+  let step = String( (currentStep % 16) ).padStart(2, '0')
+  let stepEl = document.querySelector(`svg g#STEP${step} ellipse[id^=${id}]`)
+  console.log('currentStep', currentStep)
+  console.log('step', step)
+  console.log('stepEl', stepEl)
+  if (stepEl) {
+    stepEl.classList.toggle('selected')
+  }
+  console.log('record note')
 }
 
+/*
+ * Remove all selected notes from music sheet
+ */
 function clearNotes() {
   let selectedNotes = document.querySelectorAll(`svg g[id^="STEP"] .selected`)
   for (let i = 0; i < selectedNotes.length; i++) {
@@ -156,9 +235,12 @@ function clearNotes() {
   window.location.hash = ''
 }
 
+/*
+ * Start playing the song
+ */
 function playSong() {
+  currentStep = -1
   Tone.Transport.start()
-
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.add('active')
 }
@@ -179,7 +261,7 @@ function loadSong() {
   if (hash === '') return false
   let encodedSteps = hash.split(',')
   for (let i = 0; i < encodedSteps.length; i++) {
-    let stepNumber = String(i + 1).padStart(2, '0')
+    let stepNumber = String(i).padStart(2, '0')
     let encodedStepNotes = encodedSteps[i].split('-')
     let domStepNotes = document.querySelectorAll(`svg g#STEP${stepNumber} ellipse`)
     for (let j = 0; j < domStepNotes.length; j++) {
@@ -198,7 +280,7 @@ function saveSong() {
   let song = []
   let steps = document.querySelectorAll('svg #STEPS g[id^="STEP"]')
   for (let i = 0; i < steps.length; i++) {
-    let stepNumber = String(i + 1).padStart(2, '0')
+    let stepNumber = String(i).padStart(2, '0')
     song[i] = []
     let stepNotes = document.querySelectorAll(`svg #STEPS g#STEP${stepNumber} ellipse`)
     for( let j = 0; j < stepNotes.length; j++) {
@@ -216,8 +298,9 @@ function saveSong() {
 }
 
 function stepForward() {
+  currentStep += 1
   // Get the step number pedded with 0
-  let step = String( ((currentStep) % 16) + 1 ).padStart(2, '0')
+  let step = String( ((currentStep) % 16) ).padStart(2, '0')
   // All the playhead elements
   let playHeads = Array.from(document.querySelectorAll('svg #PLAYHEAD > path')).reverse()
   // Toggle playhead active class
@@ -237,11 +320,10 @@ function stepForward() {
   // Update play button
   let playHead = document.querySelectorAll('svg g#PLAY_HEAD > rect[id^="PLAY"]')
   for (let i = 0; i < playHead.length; i++) {
-    if ((i+1) === step) {
+    if (i === step) {
       playHead[i].classList.add('active')
     } else {
       playHead[i].classList.remove('active')
     }
   }
-  currentStep += 1
 }
