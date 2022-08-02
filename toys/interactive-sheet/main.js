@@ -2,9 +2,12 @@
 let pressTimeouts =  {}
 let samplerReady = false
 let sampler = null
-let currentStep = 0
+let currentStep = -1
 let recording = false
 
+/*
+ * Play events
+ */
 window.addEventListener('keydown', function(e) {
   switch(e.key.toLowerCase()) {
     case 'arrowup':
@@ -46,6 +49,9 @@ window.addEventListener('keydown', function(e) {
   }
 })
 
+/*
+ * Record events
+ */
 window.addEventListener('keydown', function(e) {
   if (recording) {
     switch(e.key.toLowerCase()) {
@@ -88,34 +94,9 @@ window.addEventListener('keydown', function(e) {
 
 window.addEventListener('load', function() {
   loadSong()
-  // Bind clicks to the step notes
-  let steps = document.querySelectorAll('svg #STEPS > g[id^="STEP"]')
-  for (let i = 0; i < steps.length; i++) {
-    let step = steps[i]
-    let notes = step.querySelectorAll('ellipse')
-    for (let j = 0; j < notes.length; j++) {
-      let note = notes[j]
-      note.addEventListener('mousedown', function(e) {
-        e.target.classList.toggle('selected')
-        playNote(e.target.id.substr(0, 2))
-      })
-    }
-  }
-
-  // Bind clicks to the piano keys
-  let keys = document.querySelectorAll('svg g[id="KEYS"] > g > path')
-  for (let i = 0; i < keys.length; i++) {
-    let key = keys[i]
-    key.addEventListener('mousedown', function(e) {
-      // <g> has the ID but only <path> triggers the event
-      let keyElement = e.target.parentElement
-      let id = keyElement.id.substr(0, 2)
-      playNote(id)
-      if (recording) {
-        recordNote(id)
-      }
-    })
-  }
+  bindPianoKeys()
+  bindMusicScoreNotes()
+  bindControls()
 
   sampler = new Tone.Sampler({
     urls: {
@@ -130,6 +111,81 @@ window.addEventListener('load', function() {
     }
   }).toDestination();
 
+
+
+})
+
+window.addEventListener('hashchange', function() {
+  loadSong()
+})
+
+/*
+ * Gets current step padded with 0 for the css selector
+ */
+function getCurrentStep() {
+  return String( ((currentStep) % 16) ).padStart(2, '0')
+}
+
+/*
+ * Shows playhead at current step
+ */
+function showPlayHead() {
+  // All the playhead elements
+  let playHeads = Array.from(document.querySelectorAll('svg #PLAYHEAD > path')).reverse()
+  // Toggle playhead active class
+  for (let i = 0; i < playHeads.length; i++) {
+    let playHead = playHeads[i]
+    if (i == (currentStep % 16)) {
+      playHead.classList.add('active')
+    } else {
+      playHead.classList.remove('active')
+    }
+  }
+}
+
+/*
+ * Bind piano keys
+ */
+function bindPianoKeys() {
+  // Bind clicks to the piano keys
+  let keys = document.querySelectorAll('svg g[id="KEYS"] > g > path')
+  for (let i = 0; i < keys.length; i++) {
+    let key = keys[i]
+    key.addEventListener('mousedown', function(e) {
+      // <g> has the ID but only <path> triggers the event
+      let keyElement = e.target.parentElement
+      let id = keyElement.id.substr(0, 2)
+      playNote(id)
+      if (recording) {
+        recordNote(id)
+      }
+    })
+  }
+}
+
+/*
+ * Bind music score notes
+ */
+function bindMusicScoreNotes() {
+  // Bind clicks to the step notes
+  let steps = document.querySelectorAll('svg #STEPS > g[id^="STEP"]')
+  for (let i = 0; i < steps.length; i++) {
+    let step = steps[i]
+    let notes = step.querySelectorAll('ellipse')
+    for (let j = 0; j < notes.length; j++) {
+      let note = notes[j]
+      note.addEventListener('mousedown', function(e) {
+        e.target.classList.toggle('selected')
+        playNote(e.target.id.substr(0, 2))
+      })
+    }
+  }
+}
+
+/*
+ * Bind app controls
+ */
+function bindControls() {
   // Bind controls
   let clear = document.querySelector('svg g#CONTROLS g#CLEAR')
   clear.addEventListener('click', function() {
@@ -154,20 +210,27 @@ window.addEventListener('load', function() {
 
   let record = document.querySelector('svg g#RECORD')
   record.addEventListener('click', function() {
+    stopSong()
     recording = !recording
     if (recording) {
+      currentStep = 0
+      showPlayHead()
       record.classList.add('active')
     } else {
+      hidePlayHead()
       record.classList.remove('active')
     }
   })
+}
 
-})
-
-window.addEventListener('hashchange', function() {
-  loadSong()
-})
-
+/*
+ * Hides playead
+ */
+function hidePlayHead() {
+  // Update play head
+  let playHead = document.querySelector('svg #PLAYHEAD .active')
+  if (playHead) playHead.classList.remove('active')
+}
 
 /*
  * Handles requests to play note. Triggers audio, adds visual cue
@@ -213,15 +276,13 @@ function pressKey(id) {
  * Add note to sheet on current step
  */
 function recordNote(id) {
-  let step = String( (currentStep % 16) ).padStart(2, '0')
+  showPlayHead()
+  let step = getCurrentStep()
   let stepEl = document.querySelector(`svg g#STEP${step} ellipse[id^=${id}]`)
-  console.log('currentStep', currentStep)
-  console.log('step', step)
-  console.log('stepEl', stepEl)
   if (stepEl) {
     stepEl.classList.toggle('selected')
+    currentStep += 1
   }
-  console.log('record note')
 }
 
 /*
@@ -239,23 +300,33 @@ function clearNotes() {
  * Start playing the song
  */
 function playSong() {
+  if (recording) {
+    recording = false
+    let record = document.querySelector('svg g#RECORD')
+    record.classList.remove('active')
+  }
+
   currentStep = -1
   Tone.Transport.start()
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.add('active')
 }
 
+/*
+ * Stop playing the song
+ */
 function stopSong() {
   Tone.Transport.stop()
   currentStep = 0
   // Update play button
   let play = document.querySelector('svg g#CONTROLS g#PLAY')
   play.classList.remove('active')
-  // Update play head
-  let playHead = document.querySelector('svg #PLAYHEAD .active')
-  if (playHead) playHead.classList.remove('active')
+  hidePlayHead()
 }
 
+/*
+ * Load song from url's hash
+ */
 function loadSong() {
   let hash = window.location.hash.toUpperCase().substring(1)
   if (hash === '') return false
@@ -276,6 +347,9 @@ function loadSong() {
   }
 }
 
+/*
+ * Create an url hash from the placed notes
+ */
 function saveSong() {
   let song = []
   let steps = document.querySelectorAll('svg #STEPS g[id^="STEP"]')
@@ -297,21 +371,14 @@ function saveSong() {
   window.location.hash = song.join(',')
 }
 
+/*
+ * Moves to the next music step and plays all the notes there
+ */
 function stepForward() {
   currentStep += 1
   // Get the step number pedded with 0
-  let step = String( ((currentStep) % 16) ).padStart(2, '0')
-  // All the playhead elements
-  let playHeads = Array.from(document.querySelectorAll('svg #PLAYHEAD > path')).reverse()
-  // Toggle playhead active class
-  for (let i = 0; i < playHeads.length; i++) {
-    let playHead = playHeads[i]
-    if (i == (currentStep % 16)) {
-      playHead.classList.add('active')
-    } else {
-      playHead.classList.remove('active')
-    }
-  }
+  let step = getCurrentStep()
+  showPlayHead()
   // Get notes on current step
   let notes = document.querySelectorAll(`svg g#STEP${step} .selected`)
   for (let i = 0; i < notes.length; i++) {
